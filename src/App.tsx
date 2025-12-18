@@ -33,8 +33,8 @@ const parseNumber = (value: string, fallback = 0) => {
 
 const App: Component = () => {
   const [years, setYears] = createSignal(5);
-  const [baseRate, setBaseRate] = createSignal(4.25);
-  const [bonusRate, setBonusRate] = createSignal(1);
+  const [baseRate, setBaseRate] = createSignal(5.50);
+  const [bonusRate, setBonusRate] = createSignal(0.25);
   const [startMonth, setStartMonth] = createSignal(1);
   const [initialAmount, setInitialAmount] = createSignal(0);
   const [monthlyAmount, setMonthlyAmount] = createSignal(500);
