@@ -38,8 +38,7 @@ const App: Component = () => {
   const [startMonth, setStartMonth] = createSignal(1);
   const [initialAmount, setInitialAmount] = createSignal(0);
   const [monthlyAmount, setMonthlyAmount] = createSignal(500);
-  const [bonusCapEnabled, setBonusCapEnabled] = createSignal(true);
-  const [bonusCap, setBonusCap] = createSignal(30000);
+  const [investmentLimit, setInvestmentLimit] = createSignal(300000);
 
   const schedule = createMemo(() =>
     calculateDividendSchedule({
@@ -49,7 +48,7 @@ const App: Component = () => {
       startMonth: startMonth(),
       initialAmount: initialAmount(),
       monthlyAmount: monthlyAmount(),
-      bonusCap: bonusCapEnabled() ? bonusCap() : null,
+      investmentLimit: investmentLimit(),
     }),
   );
 
@@ -74,7 +73,7 @@ const App: Component = () => {
               <p class="eyebrow">Inputs</p>
               <h2>Saving plan</h2>
             </div>
-            <div class="badge">MMB based</div>
+            <div class="badge">Monthly Minimum Balance</div>
           </div>
 
           <div class="form-grid">
@@ -152,25 +151,22 @@ const App: Component = () => {
           <div class="divider" />
 
           <div class="bonus-controls">
-            <div class="bonus-row">
-              <label class="switch">
-                <input
-                  type="checkbox"
-                  checked={bonusCapEnabled()}
-                  onInput={(e) => setBonusCapEnabled(e.currentTarget.checked)}
-                />
-                <span>Bonus balance cap</span>
-              </label>
+            <label class="field">
+              <span>Investment limit (RM)</span>
               <input
                 type="number"
                 step="1000"
                 min="0"
-                disabled={!bonusCapEnabled()}
-                value={bonusCap()}
+                value={investmentLimit()}
                 inputMode="decimal"
-                onInput={(e) => setBonusCap(Math.max(0, parseNumber(e.currentTarget.value, bonusCap())))}
+                onInput={(e) =>
+                  setInvestmentLimit(Math.max(0, parseNumber(e.currentTarget.value, investmentLimit())))
+                }
               />
-            </div>
+              <span class="muted">
+                Contributions stop once balance reaches this limit; dividends keep compounding.
+              </span>
+            </label>
           </div>
         </div>
 

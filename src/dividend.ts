@@ -5,7 +5,7 @@ export type DividendInput = {
   startMonth: number; // 1-12, month when monthly savings start
   initialAmount: number;
   monthlyAmount: number;
-  bonusCap?: number | null; // optional cap on balance eligible for bonus
+  investmentLimit?: number | null; // optional maximum balance eligible for contributions
 };
 
 export type YearResult = {
@@ -35,6 +35,7 @@ const asNonNegative = (value: number) => (Number.isFinite(value) && value > 0 ? 
 export function calculateDividendSchedule(input: DividendInput): DividendSchedule {
   const yearsCount = clamp(Math.round(input.years) || 0, 0, 50);
   const startMonth = clamp(Math.round(input.startMonth) || 1, 1, 12);
+  const investmentLimit = input.investmentLimit ?? null;
 
   let balance = asNonNegative(input.initialAmount);
   let totalContributed = 0;
@@ -51,12 +52,19 @@ export function calculateDividendSchedule(input: DividendInput): DividendSchedul
     let yearContribution = yearNumber === 1 ? balance : 0;
 
     for (let month = 1; month <= 12; month++) {
-      const contributionEligible =
+      const plannedContribution =
         yearNumber > 1 || month >= startMonth ? asNonNegative(input.monthlyAmount) : 0;
 
-      if (contributionEligible > 0) {
-        balance += contributionEligible;
-        yearContribution += contributionEligible;
+      const remainingRoom =
+        investmentLimit !== null ? Math.max(0, investmentLimit - balance) : plannedContribution;
+
+      const contribution = investmentLimit !== null
+        ? Math.min(plannedContribution, remainingRoom)
+        : plannedContribution;
+
+      if (contribution > 0) {
+        balance += contribution;
+        yearContribution += contribution;
       }
 
       monthlyMMB.push(balance);
@@ -67,10 +75,7 @@ export function calculateDividendSchedule(input: DividendInput): DividendSchedul
 
     const dividend = averageMMB * (asNonNegative(input.baseRate) / 100);
 
-    const bonusEligibleBalance = input.bonusCap
-      ? Math.min(averageMMB, asNonNegative(input.bonusCap))
-      : averageMMB;
-
+    const bonusEligibleBalance = averageMMB;
     const bonus = bonusEligibleBalance * (asNonNegative(input.bonusRate) / 100);
 
     const reinvested = dividend + bonus;
