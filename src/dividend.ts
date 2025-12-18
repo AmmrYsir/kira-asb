@@ -6,7 +6,6 @@ export type DividendInput = {
   initialAmount: number;
   monthlyAmount: number;
   bonusCap?: number | null; // optional cap on balance eligible for bonus
-  bonusEligibleYears?: number | null; // optional limit on number of years bonus applies
 };
 
 export type YearResult = {
@@ -72,8 +71,7 @@ export function calculateDividendSchedule(input: DividendInput): DividendSchedul
       ? Math.min(averageMMB, asNonNegative(input.bonusCap))
       : averageMMB;
 
-    const bonusApplies = !input.bonusEligibleYears || yearNumber <= input.bonusEligibleYears;
-    const bonus = bonusApplies ? bonusEligibleBalance * (asNonNegative(input.bonusRate) / 100) : 0;
+    const bonus = bonusEligibleBalance * (asNonNegative(input.bonusRate) / 100);
 
     const reinvested = dividend + bonus;
     balance += reinvested;

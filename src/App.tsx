@@ -40,8 +40,6 @@ const App: Component = () => {
   const [monthlyAmount, setMonthlyAmount] = createSignal(500);
   const [bonusCapEnabled, setBonusCapEnabled] = createSignal(true);
   const [bonusCap, setBonusCap] = createSignal(30000);
-  const [bonusYearsEnabled, setBonusYearsEnabled] = createSignal(true);
-  const [bonusYears, setBonusYears] = createSignal(10);
 
   const schedule = createMemo(() =>
     calculateDividendSchedule({
@@ -52,7 +50,6 @@ const App: Component = () => {
       initialAmount: initialAmount(),
       monthlyAmount: monthlyAmount(),
       bonusCap: bonusCapEnabled() ? bonusCap() : null,
-      bonusEligibleYears: bonusYearsEnabled() ? bonusYears() : null,
     }),
   );
 
@@ -60,14 +57,14 @@ const App: Component = () => {
     <div class="page">
       <header class="hero">
         <div>
-          <p class="eyebrow">ASB-style dividend simulator</p>
+          <p class="eyebrow">ASB dividend simulator</p>
           <h1>Plan yearly dividends with compounding</h1>
           <p class="lede">
             Estimate dividend income using monthly minimum balances, bonus caps, and automatic
             reinvestment.
           </p>
         </div>
-        <div class="pill">SolidJS · TypeScript · RM</div>
+        <div class="pill">Made with SolidJS · TypeScript</div>
       </header>
 
       <section class="grid">
@@ -170,28 +167,8 @@ const App: Component = () => {
                 min="0"
                 disabled={!bonusCapEnabled()}
                 value={bonusCap()}
-                inputmode="decimal"
+                inputMode="decimal"
                 onInput={(e) => setBonusCap(Math.max(0, parseNumber(e.currentTarget.value, bonusCap())))}
-              />
-            </div>
-
-            <div class="bonus-row">
-              <label class="switch">
-                <input
-                  type="checkbox"
-                  checked={bonusYearsEnabled()}
-                  onInput={(e) => setBonusYearsEnabled(e.currentTarget.checked)}
-                />
-                <span>Bonus applies for first (years)</span>
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="50"
-                disabled={!bonusYearsEnabled()}
-                value={bonusYears()}
-                inputMode="numeric"
-                onInput={(e) => setBonusYears(Math.max(1, parseNumber(e.currentTarget.value, bonusYears())))}
               />
             </div>
           </div>
