@@ -1,5 +1,6 @@
-import { createMemo, createSignal, type Component } from 'solid-js';
+import { createMemo, createSignal, type Component, For } from 'solid-js';
 import { calculateDividendSchedule } from './dividend';
+import { useAnimatedNumber } from './useAnimatedNumber';
 import './app.css';
 
 const months = [
@@ -31,6 +32,11 @@ const parseNumber = (value: string, fallback = 0) => {
   return Number.isFinite(parsed) ? parsed : fallback;
 };
 
+const AnimatedCurrency = (props: { value: () => number }) => {
+  const animated = useAnimatedNumber(props.value, 600);
+  return <>{formatCurrency(animated())}</>;
+};
+
 const App: Component = () => {
   const [years, setYears] = createSignal(5);
   const [baseRate, setBaseRate] = createSignal(5.50);
@@ -53,192 +59,252 @@ const App: Component = () => {
   );
 
   return (
-    <div class="page">
-      <header class="hero">
-        <div>
-          <p class="eyebrow">ASB dividend simulator</p>
-          <h1>Plan yearly dividends with compounding</h1>
-          <p class="lede">
-            Estimate dividend income using monthly minimum balances, bonus caps, and automatic
-            reinvestment.
-          </p>
+    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30">
+      {/* Header */}
+      <header class="animate-fade-in px-4 py-8 md:py-12">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
+            <div class="space-y-2">
+              <div class="inline-flex items-center px-3 py-1 rounded-full bg-primary-100 text-primary-700 text-xs font-semibold tracking-wide uppercase">
+                v1.0
+              </div>
+              <h1 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-slate-900 tracking-tight">
+                ASB Dividend Calculator
+              </h1>
+              <p class="text-base md:text-lg text-slate-600 max-w-2xl">
+                Estimate your dividend income with monthly minimum balance calculations, automatic reinvestment, and contribution limits.
+              </p>
+            </div>
+            <div class="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-white shadow-sm border border-slate-200">
+              <div class="h-2 w-2 rounded-full bg-green-500 animate-pulse-soft"></div>
+              <span class="text-sm font-medium text-slate-700">Live calculation</span>
+            </div>
+          </div>
         </div>
-        <div class="pill">Made with SolidJS · TypeScript</div>
       </header>
 
-      <section class="grid">
-        <div class="card form">
-          <div class="card-header">
-            <div>
-              <p class="eyebrow">Inputs</p>
-              <h2>Saving plan</h2>
+      {/* Main Content */}
+      <main class="max-w-7xl mx-auto px-4 pb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+          {/* Input Card */}
+          <div class="lg:col-span-7 animate-slide-up">
+            <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/60 overflow-hidden transition-all hover:shadow-2xl hover:shadow-slate-200/60">
+              <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-primary-100 text-xs font-semibold uppercase tracking-wider mb-1">Configuration</p>
+                    <h2 class="text-xl font-display font-bold text-white">Saving Plan</h2>
+                  </div>
+                  <div class="px-3 py-1 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30">
+                    <span class="text-xs font-semibold text-white">MMB Method</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-6 space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <label class="group">
+                    <span class="block text-sm font-semibold text-slate-700 mb-2">Saving duration (years)</span>
+                    <input
+                      type="number"
+                      min="0"
+                      max="50"
+                      value={years()}
+                      inputMode="numeric"
+                      onInput={(e) => setYears(Math.max(0, parseNumber(e.currentTarget.value, years())))}
+                      class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-400 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white hover:border-slate-400"
+                    />
+                  </label>
+
+                  <label class="group">
+                    <span class="block text-sm font-semibold text-slate-700 mb-2">Dividend rate (sen per RM1)</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={baseRate()}
+                      inputMode="decimal"
+                      onInput={(e) => setBaseRate(Math.max(0, parseNumber(e.currentTarget.value, baseRate())))}
+                      class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-400 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white hover:border-slate-400"
+                    />
+                  </label>
+
+                  <label class="group">
+                    <span class="block text-sm font-semibold text-slate-700 mb-2">Bonus rate (sen per RM1)</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={bonusRate()}
+                      inputMode="decimal"
+                      onInput={(e) => setBonusRate(Math.max(0, parseNumber(e.currentTarget.value, bonusRate())))}
+                      class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-400 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white hover:border-slate-400"
+                    />
+                  </label>
+
+                  <label class="group">
+                    <span class="block text-sm font-semibold text-slate-700 mb-2">Starting month</span>
+                    <select
+                      value={startMonth()}
+                      onInput={(e) => setStartMonth(Number(e.currentTarget.value))}
+                      class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white hover:border-slate-400 cursor-pointer"
+                    >
+                      <For each={months}>{(month, index) => (
+                        <option value={index() + 1}>{month}</option>
+                      )}</For>
+                    </select>
+                  </label>
+
+                  <label class="group">
+                    <span class="block text-sm font-semibold text-slate-700 mb-2">Initial saving amount (RM)</span>
+                    <input
+                      type="number"
+                      step="100"
+                      min="0"
+                      value={initialAmount()}
+                      inputMode="decimal"
+                      onInput={(e) => setInitialAmount(Math.max(0, parseNumber(e.currentTarget.value, initialAmount())))}
+                      class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-400 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white hover:border-slate-400"
+                    />
+                  </label>
+
+                  <label class="group">
+                    <span class="block text-sm font-semibold text-slate-700 mb-2">Monthly saving amount (RM)</span>
+                    <input
+                      type="number"
+                      step="50"
+                      min="0"
+                      value={monthlyAmount()}
+                      inputMode="decimal"
+                      onInput={(e) => setMonthlyAmount(Math.max(0, parseNumber(e.currentTarget.value, monthlyAmount())))}
+                      class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-400 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white hover:border-slate-400"
+                    />
+                  </label>
+                </div>
+
+                <div class="border-t border-slate-200 my-6"></div>
+
+                <label class="group">
+                  <span class="block text-sm font-semibold text-slate-700 mb-2">Investment limit (RM)</span>
+                  <input
+                    type="number"
+                    step="1000"
+                    min="0"
+                    value={investmentLimit()}
+                    inputMode="decimal"
+                    onInput={(e) =>
+                      setInvestmentLimit(Math.max(0, parseNumber(e.currentTarget.value, investmentLimit())))
+                    }
+                    class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 placeholder-slate-400 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white hover:border-slate-400"
+                  />
+                  <p class="mt-2 text-xs text-slate-500 leading-relaxed">
+                    Contributions stop once balance reaches this limit; dividends continue compounding.
+                  </p>
+                </label>
+              </div>
             </div>
-            <div class="badge">Monthly Minimum Balance</div>
           </div>
 
-          <div class="form-grid">
-            <label class="field">
-              <span>Saving duration (years)</span>
-              <input
-                type="number"
-                min="0"
-                max="50"
-                value={years()}
-                inputMode="numeric"
-                onInput={(e) => setYears(Math.max(0, parseNumber(e.currentTarget.value, years())))}
-              />
-            </label>
+          {/* Summary Card */}
+          <div class="lg:col-span-5 animate-slide-in-right">
+            <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl shadow-xl shadow-primary-200/50 border border-primary-500/20 overflow-hidden sticky top-6">
+              <div class="px-6 py-4 border-b border-white/10">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-primary-100 text-xs font-semibold uppercase tracking-wider mb-1">Summary</p>
+                    <h2 class="text-xl font-display font-bold text-white">Projected Outcome</h2>
+                  </div>
+                  <div class="px-3 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
+                    <span class="text-xs font-semibold text-white">Compounded</span>
+                  </div>
+                </div>
+              </div>
 
-            <label class="field">
-              <span>Dividend rate (sen per RM1)</span>
-              <input
-                type="number"
-                step="0.01"
-                value={baseRate()}
-                inputMode="decimal"
-                onInput={(e) => setBaseRate(Math.max(0, parseNumber(e.currentTarget.value, baseRate())))}
-              />
-            </label>
+              <div class="p-6 space-y-4">
+                <div class="group bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 transition-all hover:bg-white/15 hover:scale-105">
+                  <p class="text-xs font-semibold text-primary-100 uppercase tracking-wider mb-2">Total Contributed</p>
+                  <p class="text-2xl md:text-3xl font-bold text-white">
+                    <AnimatedCurrency value={() => schedule().totals.contributed} />
+                  </p>
+                </div>
 
-            <label class="field">
-              <span>Bonus rate (sen per RM1)</span>
-              <input
-                type="number"
-                step="0.01"
-                value={bonusRate()}
-                inputMode="decimal"
-                onInput={(e) => setBonusRate(Math.max(0, parseNumber(e.currentTarget.value, bonusRate())))}
-              />
-            </label>
+                <div class="group bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 transition-all hover:bg-white/15 hover:scale-105">
+                  <p class="text-xs font-semibold text-primary-100 uppercase tracking-wider mb-2">Base Dividends</p>
+                  <p class="text-2xl md:text-3xl font-bold text-white">
+                    <AnimatedCurrency value={() => schedule().totals.dividend} />
+                  </p>
+                </div>
 
-            <label class="field">
-              <span>Starting month</span>
-              <select
-                value={startMonth()}
-                onInput={(e) => setStartMonth(Number(e.currentTarget.value))}
-              >
-                {months.map((month, index) => (
-                  <option value={index + 1}>{month}</option>
-                ))}
-              </select>
-            </label>
+                <div class="group bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 transition-all hover:bg-white/15 hover:scale-105">
+                  <p class="text-xs font-semibold text-primary-100 uppercase tracking-wider mb-2">Bonus Dividends</p>
+                  <p class="text-2xl md:text-3xl font-bold text-white">
+                    <AnimatedCurrency value={() => schedule().totals.bonus} />
+                  </p>
+                </div>
 
-            <label class="field">
-              <span>Initial saving amount (RM)</span>
-              <input
-                type="number"
-                step="100"
-                min="0"
-                value={initialAmount()}
-                inputMode="decimal"
-                onInput={(e) => setInitialAmount(Math.max(0, parseNumber(e.currentTarget.value, initialAmount())))}
-              />
-            </label>
-
-            <label class="field">
-              <span>Monthly saving amount (RM)</span>
-              <input
-                type="number"
-                step="50"
-                min="0"
-                value={monthlyAmount()}
-                inputMode="decimal"
-                onInput={(e) => setMonthlyAmount(Math.max(0, parseNumber(e.currentTarget.value, monthlyAmount())))}
-              />
-            </label>
-          </div>
-
-          <div class="divider" />
-
-          <div class="bonus-controls">
-            <label class="field">
-              <span>Investment limit (RM)</span>
-              <input
-                type="number"
-                step="1000"
-                min="0"
-                value={investmentLimit()}
-                inputMode="decimal"
-                onInput={(e) =>
-                  setInvestmentLimit(Math.max(0, parseNumber(e.currentTarget.value, investmentLimit())))
-                }
-              />
-              <span class="muted">
-                Contributions stop once balance reaches this limit; dividends keep compounding.
-              </span>
-            </label>
+                <div class="group bg-gradient-to-r from-accent-500 to-accent-600 rounded-xl p-4 border border-accent-400/30 shadow-lg transition-all hover:shadow-xl hover:scale-105">
+                  <p class="text-xs font-semibold text-accent-50 uppercase tracking-wider mb-2">Final Units</p>
+                  <p class="text-3xl md:text-4xl font-bold text-white">
+                    <AnimatedCurrency value={() => schedule().totals.finalUnits} />
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="card summary">
-          <div class="card-header">
-            <div>
-              <p class="eyebrow">Overview</p>
-              <h2>Projected outcome</h2>
+        {/* Table Section */}
+        <div class="lg:col-span-12 animate-slide-up" style="animation-delay: 150ms;">
+          <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/60 overflow-hidden">
+            <div class="bg-gradient-to-r from-slate-700 to-slate-800 px-6 py-4">
+              <div>
+                <p class="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-1">Annual Details</p>
+                <h2 class="text-xl font-display font-bold text-white">Yearly Breakdown</h2>
+              </div>
             </div>
-            <div class="badge ghost">Compounded</div>
-          </div>
 
-          <div class="stats">
-            <div>
-              <p>Total contributed</p>
-              <strong>{formatCurrency(schedule().totals.contributed)}</strong>
-            </div>
-            <div>
-              <p>Base dividends</p>
-              <strong>{formatCurrency(schedule().totals.dividend)}</strong>
-            </div>
-            <div>
-              <p>Bonus dividends</p>
-              <strong>{formatCurrency(schedule().totals.bonus)}</strong>
-            </div>
-            <div>
-              <p>Final units</p>
-              <strong>{formatCurrency(schedule().totals.finalUnits)}</strong>
+            <div class="p-6">
+              {schedule().years.length === 0 ? (
+                <div class="text-center py-16">
+                  <svg class="mx-auto h-16 w-16 text-slate-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <p class="text-slate-500 font-medium">Set duration above zero to see yearly projections</p>
+                </div>
+              ) : (
+                <div class="overflow-x-auto -mx-6 px-6">
+                  <table class="w-full min-w-[720px]">
+                    <thead>
+                      <tr class="border-b border-slate-200">
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Year</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Contributed</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Average MMB</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Dividend</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Bonus</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-600 uppercase tracking-wider">Total Units (End)</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                      <For each={schedule().years}>{(year) => (
+                        <tr class="group hover:bg-slate-50 transition-colors">
+                          <td class="py-4 px-4">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary-100 text-primary-700 font-bold text-sm group-hover:bg-primary-200 transition-colors">
+                              {year.year}
+                            </span>
+                          </td>
+                          <td class="py-4 px-4 font-semibold text-slate-700">{formatCurrency(year.contributed)}</td>
+                          <td class="py-4 px-4 font-semibold text-slate-700">{formatCurrency(year.averageMMB)}</td>
+                          <td class="py-4 px-4 font-semibold text-green-600">{formatCurrency(year.dividend)}</td>
+                          <td class="py-4 px-4 font-semibold text-accent-600">{formatCurrency(year.bonus)}</td>
+                          <td class="py-4 px-4 font-bold text-slate-900">{formatCurrency(year.totalUnitsEnd)}</td>
+                        </tr>
+                      )}</For>
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </section>
-
-      <section class="card table">
-        <div class="card-header">
-          <div>
-            <p class="eyebrow">Yearly breakdown</p>
-            <h2>Average MMB and dividends</h2>
-          </div>
-        </div>
-
-        {schedule().years.length === 0 ? (
-          <p class="muted">Set duration above zero to see projections.</p>
-        ) : (
-          <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Year</th>
-                  <th>Contributed</th>
-                  <th>Average MMB</th>
-                  <th>Dividend</th>
-                  <th>Bonus</th>
-                  <th>Total units (end)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {schedule().years.map((year) => (
-                  <tr>
-                    <td>{year.year}</td>
-                    <td>{formatCurrency(year.contributed)}</td>
-                    <td>{formatCurrency(year.averageMMB)}</td>
-                    <td>{formatCurrency(year.dividend)}</td>
-                    <td>{formatCurrency(year.bonus)}</td>
-                    <td>{formatCurrency(year.totalUnitsEnd)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+      </main>
     </div>
   );
 };
