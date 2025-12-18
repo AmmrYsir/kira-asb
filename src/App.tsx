@@ -249,11 +249,10 @@ const App: Component = () => {
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Table Section */}
-        <div class="lg:col-span-12 animate-slide-up" style="animation-delay: 150ms;">
-          <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/60 overflow-hidden">
+          {/* Table Section */}
+          <div class="lg:col-span-12 animate-slide-up" style="animation-delay: 150ms;">
+            <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/60 overflow-hidden">
             <div class="bg-gradient-to-r from-slate-700 to-slate-800 px-6 py-4">
               <div>
                 <p class="text-slate-300 text-xs font-semibold uppercase tracking-wider mb-1">Annual Details</p>
@@ -303,6 +302,7 @@ const App: Component = () => {
               )}
             </div>
           </div>
+        </div>
         </div>
       </main>
     </div>
