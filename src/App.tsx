@@ -1,4 +1,4 @@
-import { createMemo, createSignal, type Component, For } from 'solid-js';
+import { createEffect, createMemo, createSignal, type Component, For } from 'solid-js';
 import { calculateDividendSchedule } from './dividend';
 import { useAnimatedNumber } from './useAnimatedNumber';
 import './app.css';
@@ -38,7 +38,15 @@ const AnimatedCurrency = (props: { value: () => number }) => {
 };
 
 const App: Component = () => {
-  const [isDark, setIsDark] = createSignal(false);
+  const getInitialDarkMode = () => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('darkMode');
+      return saved ? JSON.parse(saved) : false;
+    }
+    return false;
+  };
+
+  const [isDark, setIsDark] = createSignal(getInitialDarkMode());
   const [years, setYears] = createSignal(5);
   const [baseRate, setBaseRate] = createSignal(5.50);
   const [bonusRate, setBonusRate] = createSignal(0.25);
@@ -46,6 +54,12 @@ const App: Component = () => {
   const [initialAmount, setInitialAmount] = createSignal(0);
   const [monthlyAmount, setMonthlyAmount] = createSignal(500);
   const [investmentLimit, setInvestmentLimit] = createSignal(300000);
+
+  createEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('darkMode', JSON.stringify(isDark()));
+    }
+  });
 
   const schedule = createMemo(() =>
     calculateDividendSchedule({
