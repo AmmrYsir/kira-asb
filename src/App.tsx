@@ -71,7 +71,7 @@ const App: Component = () => {
                 v1.0
               </div>
               <h1 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-slate-900 dark:text-white tracking-tight">
-                Dividend Planner
+                ASB Dividend Planner
               </h1>
               <p class="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
                 Estimate your dividend income with monthly minimum balance calculations, automatic reinvestment, and contribution limits.
@@ -91,8 +91,8 @@ const App: Component = () => {
                   <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                 </svg>
               ) : (
-                <svg class="w-5 h-5 text-slate-700" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 1.78a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zm2.828 2.828a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1m-16 0H1m15.364 1.636l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
                 </svg>
               )}
             </button>
@@ -109,7 +109,7 @@ const App: Component = () => {
               <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4">
                 <div class="flex items-center justify-between">
                   <div>
-                    <p class="text-primary-100 text-xs font-semibold uppercase tracking-wider mb-1">Configuration</p>
+                    <p class="text-primary-100 text-xs font-semibold uppercase tracking-wider mb-1">INPUT</p>
                     <h2 class="text-xl font-display font-bold text-white">Saving Plan</h2>
                   </div>
                   <div class="px-3 py-1 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30">
