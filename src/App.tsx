@@ -36,6 +36,7 @@ const App: Component = () => {
   const [monthlyAmount, setMonthlyAmount] = createSignal(500);
   const [investmentLimit, setInvestmentLimit] = createSignal(300000);
   const [expandedYear, setExpandedYear] = createSignal<number | null>(null);
+  const [customContributions, setCustomContributions] = createSignal<Record<number, Record<number, number>>>({});
 
   createEffect(() => {
     if (typeof window !== 'undefined') {
@@ -52,8 +53,34 @@ const App: Component = () => {
       initialAmount: initialAmount(),
       monthlyAmount: monthlyAmount(),
       investmentLimit: investmentLimit(),
+      customMonthlyContributions: customContributions(),
     }),
   );
+
+  const handleContributionChange = (year: number, month: number, amount: number) => {
+    const safeAmount = Math.max(0, amount);
+    setCustomContributions((prev) => {
+      const yearOverrides = { ...(prev[year] ?? {}) };
+      yearOverrides[month] = safeAmount;
+      return { ...prev, [year]: yearOverrides };
+    });
+  };
+
+  const handleContributionReset = (year: number, month: number) => {
+    setCustomContributions((prev) => {
+      const yearOverrides = prev[year];
+      if (!yearOverrides) return prev;
+      const updatedYear = { ...yearOverrides };
+      delete updatedYear[month];
+
+      if (Object.keys(updatedYear).length === 0) {
+        const { [year]: _removed, ...rest } = prev;
+        return rest;
+      }
+
+      return { ...prev, [year]: updatedYear };
+    });
+  };
 
   return (
     <div class={isDark() ? 'dark' : ''}>
@@ -127,6 +154,10 @@ const App: Component = () => {
             expandedYear={expandedYear}
             setExpandedYear={setExpandedYear}
             formatCurrency={formatCurrency}
+            customContributions={customContributions}
+            onContributionChange={handleContributionChange}
+            onContributionReset={handleContributionReset}
+            parseNumber={parseNumber}
           />
         </div>
       </main>

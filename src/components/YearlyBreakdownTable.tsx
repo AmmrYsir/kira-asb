@@ -8,6 +8,10 @@ export type YearlyBreakdownTableProps = {
   expandedYear: Accessor<number | null>;
   setExpandedYear: Setter<number | null>;
   formatCurrency: (value: number) => string;
+  customContributions: Accessor<Record<number, Record<number, number>>>;
+  onContributionChange: (year: number, month: number, amount: number) => void;
+  onContributionReset?: (year: number, month: number) => void;
+  parseNumber: (value: string, fallback?: number) => number;
 };
 
 export const YearlyBreakdownTable = (props: YearlyBreakdownTableProps) => (
@@ -63,18 +67,44 @@ export const YearlyBreakdownTable = (props: YearlyBreakdownTableProps) => (
                       <tr class="bg-slate-50/70 dark:bg-slate-800/60">
                         <td colSpan={6} class="px-4 py-4">
                           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                            <For each={year.monthlyBreakdown}>{(month) => (
-                              <div class="flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/60 px-4 py-3 shadow-sm">
-                                <div>
-                                  <p class="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wide">{months[month.month - 1]}</p>
-                                  <p class="text-xs text-slate-500 dark:text-slate-400">Contribution</p>
+                            <For each={year.monthlyBreakdown}>{(month) => {
+                              const customValue = () => props.customContributions()[year.year]?.[month.month];
+
+                              return (
+                                <div class="flex items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/60 px-4 py-3 shadow-sm" onClick={(e) => e.stopPropagation()}>
+                                  <div class="space-y-1">
+                                    <p class="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wide">{months[month.month - 1]}</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Applied: {props.formatCurrency(month.contribution)}</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">End balance: {props.formatCurrency(month.endBalance)}</p>
+                                  </div>
+                                  <div class="flex flex-col items-end gap-2">
+                                    <label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                                      <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Edit</span>
+                                      <input
+                                        type="number"
+                                        inputMode="decimal"
+                                        value={customValue() ?? month.contribution}
+                                        class="w-24 px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                        onClick={(e) => e.stopPropagation()}
+                                        onInput={(e) => props.onContributionChange(year.year, month.month, props.parseNumber(e.currentTarget.value, customValue() ?? month.contribution))}
+                                      />
+                                    </label>
+                                    {customValue() !== undefined ? (
+                                      <button
+                                        type="button"
+                                        class="text-xs font-semibold text-primary-600 dark:text-primary-300 hover:underline"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          props.onContributionReset?.(year.year, month.month);
+                                        }}
+                                      >
+                                        Reset to default
+                                      </button>
+                                    ) : null}
+                                  </div>
                                 </div>
-                                <div class="text-right">
-                                  <p class="text-sm font-semibold text-slate-900 dark:text-white">{props.formatCurrency(month.contribution)}</p>
-                                  <p class="text-xs text-slate-500 dark:text-slate-400">End balance: {props.formatCurrency(month.endBalance)}</p>
-                                </div>
-                              </div>
-                            )}</For>
+                              );
+                            }}</For>
                           </div>
                         </td>
                       </tr>

@@ -6,6 +6,7 @@ export type DividendInput = {
   initialAmount: number;
   monthlyAmount: number;
   investmentLimit?: number | null; // optional maximum balance eligible for contributions
+  customMonthlyContributions?: Record<number, Record<number, number>>; // optional per-year, per-month overrides
 };
 
 export type YearResult = {
@@ -57,9 +58,12 @@ export function calculateDividendSchedule(input: DividendInput): DividendSchedul
     // Initial contribution only counts in year 1 (already inside balance)
     let yearContribution = yearNumber === 1 ? balance : 0;
 
+    const overridesForYear = input.customMonthlyContributions?.[yearNumber];
+
     for (let month = 1; month <= 12; month++) {
-      const plannedContribution =
-        yearNumber > 1 || month >= startMonth ? asNonNegative(input.monthlyAmount) : 0;
+      const override = overridesForYear?.[month];
+      const defaultPlanned = yearNumber > 1 || month >= startMonth ? asNonNegative(input.monthlyAmount) : 0;
+      const plannedContribution = override !== undefined ? asNonNegative(override) : defaultPlanned;
 
       const remainingRoom =
         investmentLimit !== null ? Math.max(0, investmentLimit - balance) : plannedContribution;
