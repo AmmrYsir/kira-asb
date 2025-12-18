@@ -91,25 +91,27 @@ const App: Component = () => {
                 Estimate your dividend income with monthly minimum balance calculations, automatic reinvestment, and contribution limits.
               </p>
             </div>
-            <div class="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700">
-              <div class="h-2 w-2 rounded-full bg-green-500 animate-pulse-soft"></div>
-              <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Live calculation</span>
+            <div class="hidden md:flex items-center gap-3">
+              <div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700">
+                <div class="h-2 w-2 rounded-full bg-green-500 animate-pulse-soft"></div>
+                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Live calculation</span>
+              </div>
+              <button
+                onClick={() => setIsDark(!isDark())}
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
+                aria-label="Toggle dark mode"
+              >
+                {isDark() ? (
+                  <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                  </svg>
+                ) : (
+                  <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1m-16 0H1m15.364 1.636l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                  </svg>
+                )}
+              </button>
             </div>
-            <button
-              onClick={() => setIsDark(!isDark())}
-              class="hidden md:flex items-center justify-center w-10 h-10 rounded-lg bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
-              aria-label="Toggle dark mode"
-            >
-              {isDark() ? (
-                <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                </svg>
-              ) : (
-                <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1m-16 0H1m15.364 1.636l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                </svg>
-              )}
-            </button>
           </div>
         </div>
       </header>
@@ -291,7 +293,7 @@ const App: Component = () => {
                 </div>
               </div>
 
-              <div class="p-6">
+              <div class="">
               {schedule().years.length === 0 ? (
                 <div class="text-center py-16">
                   <svg class="mx-auto h-16 w-16 text-slate-300 dark:text-slate-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
