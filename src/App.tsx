@@ -26,6 +26,11 @@ const formatCurrency = (value: number) =>
 
 const formatNumber = (value: number) => value.toLocaleString('en-US', { maximumFractionDigits: 2 });
 
+const parseNumber = (value: string, fallback = 0) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
 const App: Component = () => {
   const [years, setYears] = createSignal(5);
   const [baseRate, setBaseRate] = createSignal(4.25);
@@ -83,7 +88,8 @@ const App: Component = () => {
                 min="0"
                 max="50"
                 value={years()}
-                onInput={(e) => setYears(Number(e.currentTarget.value))}
+                inputMode="numeric"
+                onInput={(e) => setYears(Math.max(0, parseNumber(e.currentTarget.value, years())))}
               />
             </label>
 
@@ -93,7 +99,8 @@ const App: Component = () => {
                 type="number"
                 step="0.01"
                 value={baseRate()}
-                onInput={(e) => setBaseRate(Number(e.currentTarget.value))}
+                inputMode="decimal"
+                onInput={(e) => setBaseRate(Math.max(0, parseNumber(e.currentTarget.value, baseRate())))}
               />
             </label>
 
@@ -103,7 +110,8 @@ const App: Component = () => {
                 type="number"
                 step="0.01"
                 value={bonusRate()}
-                onInput={(e) => setBonusRate(Number(e.currentTarget.value))}
+                inputMode="decimal"
+                onInput={(e) => setBonusRate(Math.max(0, parseNumber(e.currentTarget.value, bonusRate())))}
               />
             </label>
 
@@ -126,7 +134,8 @@ const App: Component = () => {
                 step="100"
                 min="0"
                 value={initialAmount()}
-                onInput={(e) => setInitialAmount(Number(e.currentTarget.value))}
+                inputMode="decimal"
+                onInput={(e) => setInitialAmount(Math.max(0, parseNumber(e.currentTarget.value, initialAmount())))}
               />
             </label>
 
@@ -137,7 +146,8 @@ const App: Component = () => {
                 step="50"
                 min="0"
                 value={monthlyAmount()}
-                onInput={(e) => setMonthlyAmount(Number(e.currentTarget.value))}
+                inputMode="decimal"
+                onInput={(e) => setMonthlyAmount(Math.max(0, parseNumber(e.currentTarget.value, monthlyAmount())))}
               />
             </label>
           </div>
@@ -160,7 +170,8 @@ const App: Component = () => {
                 min="0"
                 disabled={!bonusCapEnabled()}
                 value={bonusCap()}
-                onInput={(e) => setBonusCap(Number(e.currentTarget.value))}
+                inputmode="decimal"
+                onInput={(e) => setBonusCap(Math.max(0, parseNumber(e.currentTarget.value, bonusCap())))}
               />
             </div>
 
@@ -179,7 +190,8 @@ const App: Component = () => {
                 max="50"
                 disabled={!bonusYearsEnabled()}
                 value={bonusYears()}
-                onInput={(e) => setBonusYears(Number(e.currentTarget.value))}
+                inputMode="numeric"
+                onInput={(e) => setBonusYears(Math.max(1, parseNumber(e.currentTarget.value, bonusYears())))}
               />
             </div>
           </div>
