@@ -16,6 +16,11 @@ export type YearResult = {
   bonus: number;
   totalUnitsEnd: number;
   monthlyMMB: number[];
+  monthlyBreakdown: {
+    month: number;
+    contribution: number;
+    endBalance: number;
+  }[];
 };
 
 export type DividendSchedule = {
@@ -47,6 +52,7 @@ export function calculateDividendSchedule(input: DividendInput): DividendSchedul
   for (let yearIndex = 0; yearIndex < yearsCount; yearIndex++) {
     const yearNumber = yearIndex + 1;
     const monthlyMMB: number[] = [];
+    const monthlyBreakdown: { month: number; contribution: number; endBalance: number }[] = [];
 
     // Initial contribution only counts in year 1 (already inside balance)
     let yearContribution = yearNumber === 1 ? balance : 0;
@@ -68,6 +74,7 @@ export function calculateDividendSchedule(input: DividendInput): DividendSchedul
       }
 
       monthlyMMB.push(balance);
+      monthlyBreakdown.push({ month, contribution, endBalance: balance });
     }
 
     const sumMMB = monthlyMMB.reduce((acc, value) => acc + value, 0);
@@ -92,7 +99,8 @@ export function calculateDividendSchedule(input: DividendInput): DividendSchedul
       dividend,
       bonus,
       totalUnitsEnd: balance,
-      monthlyMMB,
+        monthlyMMB,
+        monthlyBreakdown,
     });
   }
 

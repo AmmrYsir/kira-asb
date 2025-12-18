@@ -54,6 +54,7 @@ const App: Component = () => {
   const [initialAmount, setInitialAmount] = createSignal(0);
   const [monthlyAmount, setMonthlyAmount] = createSignal(500);
   const [investmentLimit, setInvestmentLimit] = createSignal(300000);
+  const [expandedYear, setExpandedYear] = createSignal<number | null>(null);
 
   createEffect(() => {
     if (typeof window !== 'undefined') {
@@ -316,7 +317,11 @@ const App: Component = () => {
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                       <For each={schedule().years}>{(year) => (
-                        <tr class="group border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                        <>
+                        <tr
+                          class="group border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer"
+                          onClick={() => setExpandedYear(expandedYear() === year.year ? null : year.year)}
+                        >
                           <td class="py-4 px-4">
                             <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-bold text-sm group-hover:bg-primary-200 dark:group-hover:bg-primary-900/50 transition-colors">
                               {year.year}
@@ -328,6 +333,27 @@ const App: Component = () => {
                           <td class="py-4 px-4 font-semibold text-accent-600 dark:text-accent-400">{formatCurrency(year.bonus)}</td>
                           <td class="py-4 px-4 font-bold text-slate-900 dark:text-white">{formatCurrency(year.totalUnitsEnd)}</td>
                         </tr>
+                        {expandedYear() === year.year && (
+                          <tr class="bg-slate-50/70 dark:bg-slate-800/60">
+                            <td colSpan={6} class="px-4 py-4">
+                              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                <For each={year.monthlyBreakdown}>{(month) => (
+                                  <div class="flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/60 px-4 py-3 shadow-sm">
+                                    <div>
+                                      <p class="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-wide">{months[month.month - 1]}</p>
+                                      <p class="text-xs text-slate-500 dark:text-slate-400">Contribution</p>
+                                    </div>
+                                    <div class="text-right">
+                                      <p class="text-sm font-semibold text-slate-900 dark:text-white">{formatCurrency(month.contribution)}</p>
+                                      <p class="text-xs text-slate-500 dark:text-slate-400">End balance: {formatCurrency(month.endBalance)}</p>
+                                    </div>
+                                  </div>
+                                )}</For>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                        </>
                       )}</For>
                     </tbody>
                   </table>
