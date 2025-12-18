@@ -105,7 +105,7 @@ const App: Component = () => {
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {/* Input Card */}
           <div class="lg:col-span-7 animate-slide-up">
-            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 border border-slate-200/60 dark:border-slate-700/60 overflow-hidden transition-all hover:shadow-2xl hover:shadow-slate-200/60 dark:hover:shadow-slate-900/60">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden transition-all e-200/60 dark:hover:shadow-slate-900/60">
               <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4">
                 <div class="flex items-center justify-between">
                   <div>
@@ -222,7 +222,7 @@ const App: Component = () => {
 
           {/* Summary Card */}
           <div class="lg:col-span-5 animate-slide-in-right">
-            <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl shadow-xl shadow-primary-200/50 border border-primary-500/20 overflow-hidden sticky top-6">
+            <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl shadow-xl dark:shadow-none border border-slate-200/60 dark:border-slate-700/60 overflow-hidden sticky top-6">
               <div class="px-6 py-4 border-b border-white/10">
                 <div class="flex items-center justify-between">
                   <div>
