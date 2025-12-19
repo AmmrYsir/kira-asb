@@ -5,28 +5,33 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-slate-50 text-slate-900 font-sans antialiased;
-  }
+	body {
+		@apply bg-slate-50 text-slate-900 font-sans antialiased;
+		user-select: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+	}
 }
 
 @layer utilities {
-  .animation-delay-150 {
-    animation-delay: 150ms;
-  }
-  
-  .animation-delay-300 {
-    animation-delay: 300ms;
-  }
+	.animation-delay-150 {
+		animation-delay: 150ms;
+	}
+
+	.animation-delay-300 {
+		animation-delay: 300ms;
+	}
 }
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
 }
