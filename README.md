@@ -2,6 +2,8 @@
 
 A comprehensive web application for estimating and planning your Amanah Saham Bumiputera (ASB) dividend income. Built with SolidJS and TailwindCSS, this tool helps you project your returns using the Monthly Minimum Balance (MMB) method with automatic dividend reinvestment.
 
+<img width="1298" height="791" alt="asb-dividend-planner" src="https://github.com/user-attachments/assets/52a58604-9f3f-45a9-bf50-707f9e09e7b9" />
+
 ## Features
 
 ### 💰 Accurate Dividend Calculations
