@@ -3,6 +3,30 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+	--color-primary-50: #eef2ff;
+	--color-primary-100: #e0e7ff;
+	--color-primary-200: #c7d2fe;
+	--color-primary-300: #a5b4fc;
+	--color-primary-400: #818cf8;
+	--color-primary-500: #6366f1;
+	--color-primary-600: #4f46e5;
+	--color-primary-700: #4338ca;
+	--color-primary-800: #3730a3;
+	--color-primary-900: #312e81;
+
+	--color-accent-50: #fff7ed;
+	--color-accent-100: #ffedd5;
+	--color-accent-200: #fed7aa;
+	--color-accent-300: #fdba74;
+	--color-accent-400: #fb923c;
+	--color-accent-500: #f97316;
+	--color-accent-600: #ea580c;
+	--color-accent-700: #c2410c;
+	--color-accent-800: #9a3412;
+	--color-accent-900: #7c2d12;
+}
+
 @layer base {
 	body {
 		@apply bg-slate-50 text-slate-900 font-sans antialiased dark:bg-slate-950 dark:text-slate-100;
