@@ -1,36 +1,63 @@
-## Usage
+# ASB Dividend Planner
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+Estimate ASB dividend income with monthly minimum balance calculations, automatic reinvestment, and contribution limits. Built with SolidJS and Tailwind CSS.
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+## Quick Start
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
+1. Install dependencies
+	- npm install
+	- pnpm install
+	- yarn install
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+2. Run the dev server
+	- npm run dev
+	- pnpm dev
+	- yarn dev
 
-## Available Scripts
+3. Open the app
+	- http://localhost:3000
 
-In the project directory, you can run:
+## Scripts
 
-### `npm run dev` or `npm start`
+- npm run dev: Start Vite dev server
+- npm run build: Build production assets to dist
+- npm run serve: Preview the production build locally
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## System Overview
 
-The page will reload if you make edits.<br>
+### Core Features
 
-### `npm run build`
+- Dividend projection by year and month
+- Monthly minimum balance calculation
+- Automatic reinvestment and contribution limits
+- Editable monthly contributions with reset
+- Light/Dark mode toggle persisted in localStorage
 
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
+### UI Structure
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+- App shell and theming: src/App.tsx
+- Inputs: src/components/InputCard.tsx
+- Summary totals: src/components/SummaryCard.tsx
+- Yearly detail table: src/components/YearlyBreakdownTable.tsx
 
-## Deployment
+### Calculation Engine
 
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+- Dividend and schedule logic: src/libs/dividend.ts
+- Month labels: src/libs/months.ts
 
-## This project was created with the [Solid CLI](https://github.com/solidjs-community/solid-cli)
+### Styling
+
+- Tailwind v4 via @import in src/style.css
+- Custom color scales (primary, accent) defined in @theme
+- Class-based dark mode via .dark on the app root
+
+## Build & Deploy
+
+Run npm run build to generate the dist folder. Deploy dist to any static host (Netlify, Vercel, GitHub Pages, etc.).
+
+## Tech Stack
+
+- SolidJS
+- Vite
+- Tailwind CSS v4
+- TypeScript
