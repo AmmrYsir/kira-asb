@@ -4,6 +4,7 @@ import { InputCard } from './components/InputCard';
 import { SummaryCard } from './components/SummaryCard';
 import { YearlyBreakdownTable } from './components/YearlyBreakdownTable';
 import { months } from '../src/libs/months';
+import './style.css';
 
 const formatCurrency = (value: number) =>
 	value.toLocaleString('en-MY', {
