@@ -21,9 +21,9 @@ export type InputCardProps = {
 };
 
 export const InputCard = (props: InputCardProps) => (
-  <div class="lg:col-span-7 animate-slide-up">
-    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 border border-slate-200/60 dark:border-slate-700/60 overflow-hidden transition-all hover:shadow-2xl hover:shadow-slate-200/60 dark:hover:shadow-slate-900/60">
-      <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4">
+  <div class="lg:col-span-5 animate-slide-up">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden sticky top-6">
+      <div class="bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-primary-100 text-xs font-semibold uppercase tracking-wider mb-1">Input</p>
@@ -35,8 +35,8 @@ export const InputCard = (props: InputCardProps) => (
         </div>
       </div>
 
-      <div class="p-6 space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div class="p-6 space-y-5">
+        <div class="grid grid-cols-2 gap-4">
           <label class="group">
             <span class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Saving duration (years)</span>
             <input
@@ -46,7 +46,7 @@ export const InputCard = (props: InputCardProps) => (
               value={props.years()}
               inputMode="numeric"
               onInput={(e) => props.setYears(Math.max(0, props.parseNumber(e.currentTarget.value, props.years())))}
-              class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-400 dark:hover:border-slate-500"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-300 dark:hover:border-slate-500"
             />
           </label>
 
@@ -58,7 +58,7 @@ export const InputCard = (props: InputCardProps) => (
               value={props.baseRate()}
               inputMode="decimal"
               onInput={(e) => props.setBaseRate(Math.max(0, props.parseNumber(e.currentTarget.value, props.baseRate())))}
-              class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-400 dark:hover:border-slate-500"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-300 dark:hover:border-slate-500"
             />
           </label>
 
@@ -70,7 +70,7 @@ export const InputCard = (props: InputCardProps) => (
               value={props.bonusRate()}
               inputMode="decimal"
               onInput={(e) => props.setBonusRate(Math.max(0, props.parseNumber(e.currentTarget.value, props.bonusRate())))}
-              class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-400 dark:hover:border-slate-500"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-300 dark:hover:border-slate-500"
             />
           </label>
 
@@ -79,7 +79,7 @@ export const InputCard = (props: InputCardProps) => (
             <select
               value={props.startMonth()}
               onInput={(e) => props.setStartMonth(Number(e.currentTarget.value))}
-              class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-400 dark:hover:border-slate-500 cursor-pointer"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-300 dark:hover:border-slate-500 cursor-pointer"
             >
               <For each={props.months}>{(month, index) => (
                 <option value={index() + 1}>{month}</option>
@@ -96,7 +96,7 @@ export const InputCard = (props: InputCardProps) => (
               value={props.initialAmount()}
               inputMode="decimal"
               onInput={(e) => props.setInitialAmount(Math.max(0, props.parseNumber(e.currentTarget.value, props.initialAmount())))}
-              class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-400 dark:hover:border-slate-500"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-300 dark:hover:border-slate-500"
             />
           </label>
 
@@ -109,30 +109,31 @@ export const InputCard = (props: InputCardProps) => (
               value={props.monthlyAmount()}
               inputMode="decimal"
               onInput={(e) => props.setMonthlyAmount(Math.max(0, props.parseNumber(e.currentTarget.value, props.monthlyAmount())))}
-              class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-400 dark:hover:border-slate-500"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-300 dark:hover:border-slate-500"
             />
           </label>
         </div>
 
-        <div class="border-t border-slate-200 dark:border-slate-700 my-6"></div>
+        <div class="border-t border-slate-200 dark:border-slate-700 pt-5">
 
-        <label class="group">
-          <span class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Investment limit (RM)</span>
-          <input
-            type="number"
-            step="1000"
-            min="0"
-            value={props.investmentLimit()}
-            inputMode="decimal"
-            onInput={(e) =>
-              props.setInvestmentLimit(Math.max(0, props.parseNumber(e.currentTarget.value, props.investmentLimit())))
-            }
-            class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-400 dark:hover:border-slate-500"
-          />
-          <p class="mt-2 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-            Contributions stop once balance reaches this limit; dividends continue compounding.
-          </p>
-        </label>
+          <label class="group">
+            <span class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Investment limit (RM)</span>
+            <input
+              type="number"
+              step="1000"
+              min="0"
+              value={props.investmentLimit()}
+              inputMode="decimal"
+              onInput={(e) =>
+                props.setInvestmentLimit(Math.max(0, props.parseNumber(e.currentTarget.value, props.investmentLimit())))
+              }
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white dark:focus:bg-slate-600 hover:border-slate-300 dark:hover:border-slate-500"
+            />
+            <p class="mt-2 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              Contributions stop once balance reaches this limit; dividends continue compounding.
+            </p>
+          </label>
+        </div>
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
 {
 	"name": "kira-asb",
-	"version": "0.0.1",
+	"version": "2.0.0",
 	"description": "",
 	"type": "module",
 	"scripts": {
@@ -19,6 +19,8 @@
 	},
 	"dependencies": {
 		"@tailwindcss/vite": "^4.1.18",
+		"@types/d3": "^7.4.3",
+		"d3": "^7.9.0",
 		"solid-js": "^1.9.5",
 		"tailwindcss": "^4.1.18"
 	}

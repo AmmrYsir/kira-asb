@@ -3,6 +3,8 @@ import { calculateDividendSchedule } from '../src/libs/dividend';
 import { InputCard } from './components/InputCard';
 import { SummaryCard } from './components/SummaryCard';
 import { YearlyBreakdownTable } from './components/YearlyBreakdownTable';
+import { PortfolioChart } from './components/PortfolioChart';
+import { YearlyChart } from './components/YearlyChart';
 import { months } from '../src/libs/months';
 import './style.css';
 
@@ -85,31 +87,35 @@ const App: Component = () => {
 	return (
 		<div class={isDark() ? 'dark' : ''}>
 			<div class="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
-				{/* Header */}
-				<header class="animate-fade-in px-4 py-8 md:py-12">
+				<header class="px-4 md:px-8 py-6 md:py-10 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
 					<div class="max-w-7xl mx-auto">
-						<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
-							<div class="space-y-2">
-								<div class="inline-flex items-center px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-semibold tracking-wide uppercase">
-									v1.0
+						<div class="flex items-center justify-between">
+							<div>
+								<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-semibold tracking-wide uppercase mb-3">
+									<span class="w-2 h-2 rounded-full bg-primary-500"></span>
+									v2.0
 								</div>
-								<h1 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-slate-900 dark:text-white tracking-tight">
+								<h1 class="text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white tracking-tight">
 									ASB Dividend Planner
 								</h1>
-								<p class="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-									Estimate your dividend income with monthly minimum balance calculations, automatic reinvestment, and contribution limits.
+								<p class="text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
+									Estimate your dividend income with interactive visualizations and real-time projections.
 								</p>
 							</div>
-							<div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+							<div class="flex items-center gap-3">
 								<button
 									onClick={() => setIsDark(!isDark())}
-									class="flex items-center justify-center w-10 h-10 rounded-lg bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
+									class="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
 									aria-label="Toggle dark mode"
 								>
 									{isDark() ? (
-										<span class="material-icons text-yellow-500">light_mode</span>
+										<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+										</svg>
 									) : (
-										<span class="material-icons text-yellow-500">dark_mode</span>
+										<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+										</svg>
 									)}
 								</button>
 							</div>
@@ -117,9 +123,42 @@ const App: Component = () => {
 					</div>
 				</header>
 
-				{/* Main Content */}
-				<main class="max-w-7xl mx-auto px-4 pb-16">
-					<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+				<main class="max-w-7xl mx-auto px-4 md:px-8 py-8">
+					<SummaryCard schedule={schedule} formatCurrency={formatCurrency} />
+
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+						<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700">
+							<div class="flex items-center justify-between mb-6">
+								<div>
+									<h3 class="text-lg font-display font-bold text-slate-900 dark:text-white">Portfolio Growth</h3>
+									<p class="text-sm text-slate-500 dark:text-slate-400">Total value over time</p>
+								</div>
+								<div class="flex items-center gap-3">
+									<span class="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300">
+										<span class="w-3 h-3 rounded-full bg-primary-500"></span>
+										Total Value
+									</span>
+									<span class="flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">
+										<span class="w-3 h-3 rounded-full bg-slate-400"></span>
+										Principal
+									</span>
+								</div>
+							</div>
+							<PortfolioChart schedule={schedule()} formatCurrency={formatCurrency} />
+						</div>
+
+						<div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700">
+							<div class="flex items-center justify-between mb-6">
+								<div>
+									<h3 class="text-lg font-display font-bold text-slate-900 dark:text-white">Yearly Dividends</h3>
+									<p class="text-sm text-slate-500 dark:text-slate-400">Dividend income by year</p>
+								</div>
+							</div>
+							<YearlyChart schedule={schedule()} formatCurrency={formatCurrency} />
+						</div>
+					</div>
+
+					<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 						<InputCard
 							months={months}
 							years={years}
@@ -138,8 +177,6 @@ const App: Component = () => {
 							setInvestmentLimit={setInvestmentLimit}
 							parseNumber={parseNumber}
 						/>
-
-						<SummaryCard schedule={schedule} formatCurrency={formatCurrency} />
 
 						<YearlyBreakdownTable
 							schedule={schedule}

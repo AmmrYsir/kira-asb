@@ -15,11 +15,11 @@ export type YearlyBreakdownTableProps = {
 };
 
 export const YearlyBreakdownTable = (props: YearlyBreakdownTableProps) => (
-	<div class="lg:col-span-12 animate-slide-up" style="animation-delay: 150ms;">
-		<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 border border-slate-200/60 dark:border-slate-700/60 overflow-hidden">
-			<div class="bg-gradient-to-r from-slate-700 dark:from-slate-900 to-slate-800 dark:to-slate-950 px-6 py-4">
+	<div class="lg:col-span-7 animate-slide-up" style="animation-delay: 150ms;">
+		<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+			<div class="bg-slate-900 dark:bg-slate-950 px-6 py-4">
 				<div>
-					<p class="text-slate-300 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Annual Details</p>
+					<p class="text-slate-400 dark:text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Annual Details</p>
 					<h2 class="text-xl font-display font-bold text-white">Yearly Breakdown</h2>
 				</div>
 			</div>
