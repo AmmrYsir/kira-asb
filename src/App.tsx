@@ -23,8 +23,12 @@ const parseNumber = (value: string, fallback = 0) => {
 const App: Component = () => {
 	const getInitialDarkMode = () => {
 		if (typeof window !== 'undefined') {
-			const saved = localStorage.getItem('darkMode');
-			return saved ? JSON.parse(saved) : false;
+			try {
+				const saved = localStorage.getItem('darkMode');
+				return saved ? JSON.parse(saved) : false;
+			} catch {
+				return false;
+			}
 		}
 		return false;
 	};
