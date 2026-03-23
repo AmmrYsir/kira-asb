@@ -15,7 +15,7 @@ export const PortfolioChart = (props: PortfolioChartProps) => {
     if (!containerRef) return;
 
     const container = containerRef;
-    container.innerHTML = '';
+    container.replaceChildren();
 
     const width = container.clientWidth;
     const height = 256;
@@ -174,6 +174,10 @@ export const PortfolioChart = (props: PortfolioChartProps) => {
       .style('transform', 'translate(-50%, -100%)')
       .style('margin-top', '-10px');
 
+    const tooltipTitle = tooltip.append('div').attr('class', 'font-semibold');
+    const tooltipTotal = tooltip.append('div').attr('class', 'text-teal-300');
+    const tooltipPrincipal = tooltip.append('div').attr('class', 'text-slate-400');
+
     const focusLine = svg
       .append('line')
       .attr('stroke', '#0d9488')
@@ -226,12 +230,11 @@ export const PortfolioChart = (props: PortfolioChartProps) => {
         tooltip
           .style('left', `${x(d.month)}px`)
           .style('top', `${y(d.total)}px`)
-          .style('opacity', 1)
-          .html(
-            `<div class="font-semibold">Month ${d.month}</div>
-            <div class="text-teal-300">Total: ${props.formatCurrency(d.total)}</div>
-            <div class="text-slate-400">Principal: ${props.formatCurrency(d.principal)}</div>`
-          );
+          .style('opacity', 1);
+
+        tooltipTitle.text(`Month ${d.month}`);
+        tooltipTotal.text(`Total: ${props.formatCurrency(d.total)}`);
+        tooltipPrincipal.text(`Principal: ${props.formatCurrency(d.principal)}`);
       }
     });
 

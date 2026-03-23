@@ -81,6 +81,8 @@ export const YearlyBreakdownTable = (props: YearlyBreakdownTableProps) => (
 																		<label class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
 																			<span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Edit</span>
 																			<input
+																				id={`customContribution-${year.year}-${month.month}`}
+																				name={`customContribution-${year.year}-${month.month}`}
 																				type="number"
 																				inputMode="decimal"
 																				value={customValue() ?? month.contribution}

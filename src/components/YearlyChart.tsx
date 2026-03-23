@@ -15,7 +15,7 @@ export const YearlyChart = (props: YearlyChartProps) => {
     if (!containerRef) return;
 
     const container = containerRef;
-    container.innerHTML = '';
+    container.replaceChildren();
 
     const width = container.clientWidth;
     const height = 256;
@@ -28,7 +28,10 @@ export const YearlyChart = (props: YearlyChartProps) => {
     }));
 
     if (data.length === 0) {
-      container.innerHTML = '<div class="flex items-center justify-center h-full text-slate-400 text-sm">Set duration above zero to see data</div>';
+      const emptyState = document.createElement('div');
+      emptyState.className = 'flex items-center justify-center h-full text-slate-400 text-sm';
+      emptyState.textContent = 'Set duration above zero to see data';
+      container.append(emptyState);
       return;
     }
 
@@ -108,6 +111,18 @@ export const YearlyChart = (props: YearlyChartProps) => {
       .attr('class', 'year-group')
       .attr('transform', (d) => `translate(${x0(String(d.year))},0)`);
 
+    // Tooltip
+    const tooltip = d3
+      .select(container)
+      .append('div')
+      .attr(
+        'class',
+        'absolute bg-slate-900 text-white text-xs px-3 py-2 rounded-lg pointer-events-none opacity-0 transition-opacity z-10'
+      );
+
+    const tooltipTitle = tooltip.append('div').attr('class', 'font-semibold');
+    const tooltipValue = tooltip.append('div');
+
     // Base dividend bars
     yearGroups
       .append('rect')
@@ -122,9 +137,10 @@ export const YearlyChart = (props: YearlyChartProps) => {
         d3.select(this).attr('fill', '#14b8a6');
         tooltip
           .style('opacity', 1)
-          .html(`<div class="font-semibold">Year ${d.year}</div><div class="text-teal-300">Base: ${props.formatCurrency(d.base)}</div>`)
           .style('left', `${event.offsetX + 10}px`)
           .style('top', `${event.offsetY - 10}px`);
+        tooltipTitle.text(`Year ${d.year}`);
+        tooltipValue.attr('class', 'text-teal-300').text(`Base: ${props.formatCurrency(d.base)}`);
       })
       .on('mouseleave', function () {
         d3.select(this).attr('fill', '#0d9488');
@@ -145,23 +161,15 @@ export const YearlyChart = (props: YearlyChartProps) => {
         d3.select(this).attr('fill', '#fbbf24');
         tooltip
           .style('opacity', 1)
-          .html(`<div class="font-semibold">Year ${d.year}</div><div class="text-amber-300">Bonus: ${props.formatCurrency(d.bonus)}</div>`)
           .style('left', `${event.offsetX + 10}px`)
           .style('top', `${event.offsetY - 10}px`);
+        tooltipTitle.text(`Year ${d.year}`);
+        tooltipValue.attr('class', 'text-amber-300').text(`Bonus: ${props.formatCurrency(d.bonus)}`);
       })
       .on('mouseleave', function () {
         d3.select(this).attr('fill', '#f59e0b');
         tooltip.style('opacity', 0);
       });
-
-    // Tooltip
-    const tooltip = d3
-      .select(container)
-      .append('div')
-      .attr(
-        'class',
-        'absolute bg-slate-900 text-white text-xs px-3 py-2 rounded-lg pointer-events-none opacity-0 transition-opacity z-10'
-      );
   };
 
   onMount(() => {
